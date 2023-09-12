@@ -2,71 +2,64 @@
 "use client";
 import { useEffect, useState } from "react";
 
-import { Frame, frames } from "./structure";
+import { IFrame } from "./types";
+import { frames } from "./structure";
 import { Button, Container, Content, Item, Main } from "./styles";
 
+const VALUES = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
 export function Frame() {
-  const [data, setData] = useState([] as Frame[]);
+  const [data, setData] = useState<IFrame.Frame[]>([]);
   const [emptyFrames, setEmptyFrame] = useState<number[]>([]);
 
   useEffect(() => {
-    if (emptyFrames.length > 0) increment();
+    if (emptyFrames.length > 0) generate();
   }, [emptyFrames]);
 
-  function increment() {
+  function generate() {
     setData(frames);
 
-    const parsedValues = frames.map(({ values, frame }) =>
-      values.map((array) => {
-        return { ...array, frame: 1 };
-      })
+    const values = frames.map(({ values, frame }) =>
+      values.map((array) => ({ ...array, frame }))
     );
 
     let currentValues = [
-      ...parsedValues[0],
-      ...parsedValues[1],
-      ...parsedValues[2],
-      ...parsedValues[3],
-      ...parsedValues[4],
-      ...parsedValues[5],
-      ...parsedValues[6],
-      ...parsedValues[7],
-      ...parsedValues[8],
+      ...values[0],
+      ...values[1],
+      ...values[2],
+      ...values[3],
+      ...values[4],
+      ...values[5],
+      ...values[6],
+      ...values[7],
+      ...values[8],
     ];
-
-    const randomValues = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
     const newData = frames.map(({ frame, values }) => {
       const newValues = values.map(({ x, y }) => {
         const lineValues = currentValues
-          .filter((current) => current?.x === x)
-          .map(({ value }) => value)
-          .filter((value) => value);
+          .filter((current) => current?.x === x && current?.value)
+          .map(({ value }) => value);
 
         const columnValues = currentValues
-          .filter((current) => current?.y === y)
-          .map(({ value }) => value)
-          .filter((value) => value);
+          .filter((current) => current?.y === y && current?.value)
+          .map(({ value }) => value);
 
         const frameValues = currentValues
-          .filter((current) => current?.frame === frame)
-          .map(({ value }) => value)
-          .filter((value) => value);
+          .filter((current) => current?.frame === frame && current?.value)
+          .map(({ value }) => value);
 
-        const filteredRandomValues = randomValues.filter(
-          (number: any) =>
+        const filteredValues = VALUES.filter(
+          (number) =>
             !lineValues.includes(number) &&
             !columnValues.includes(number) &&
             !frameValues.includes(number)
         );
 
-        const position = Math.floor(
-          Math.random() * filteredRandomValues.length + 0
-        );
+        const position = Math.floor(Math.random() * filteredValues.length + 0);
+        const newValue = filteredValues[position];
 
-        const newValue = filteredRandomValues[position];
-
-        const filteredValues = currentValues
+        const filteredCurrentValues = currentValues
           .map((current) => {
             if (current?.x === x && current?.y === y) return null;
             return current;
@@ -74,7 +67,7 @@ export function Frame() {
           .filter((value) => value);
 
         currentValues = [
-          ...filteredValues,
+          ...filteredCurrentValues,
           { x, y, value: newValue, frame },
         ] as any;
 
@@ -118,7 +111,7 @@ export function Frame() {
         ))}
       </Main>
 
-      <Button onClick={increment}>Gerar sudoku</Button>
+      <Button onClick={generate}>Gerar sudoku</Button>
     </Container>
   );
 }

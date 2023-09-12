@@ -1,22 +1,15 @@
-export type Frame = {
-  frame: number;
-  values: {
-    x: number;
-    y: number;
-    value: null;
-  }[];
-};
+import { IFrame } from "./types";
 
 export const values = [
-  { x: 0, y: 0, value: null },
-  { x: 0, y: 0, value: null },
-  { x: 0, y: 0, value: null },
-  { x: 0, y: 0, value: null },
-  { x: 0, y: 0, value: null },
-  { x: 0, y: 0, value: null },
-  { x: 0, y: 0, value: null },
-  { x: 0, y: 0, value: null },
-  { x: 0, y: 0, value: null },
+  { x: 0, y: 0, value: 0 },
+  { x: 0, y: 0, value: 0 },
+  { x: 0, y: 0, value: 0 },
+  { x: 0, y: 0, value: 0 },
+  { x: 0, y: 0, value: 0 },
+  { x: 0, y: 0, value: 0 },
+  { x: 0, y: 0, value: 0 },
+  { x: 0, y: 0, value: 0 },
+  { x: 0, y: 0, value: 0 },
 ];
 
 function getStructureByFrame(frame: number) {
@@ -58,7 +51,7 @@ export function getValues(frame: number) {
   return parsedValues;
 }
 
-export const frames: Frame[] = [
+export const frames: IFrame.Frame[] = [
   //first line
   { frame: 1, values: getValues(1) },
   { frame: 2, values: getValues(2) },
